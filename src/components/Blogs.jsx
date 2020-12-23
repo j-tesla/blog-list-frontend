@@ -4,6 +4,7 @@ import Blog from './Blog';
 const Blogs = ({ blogs, user, setUser }) => {
   const handleClick = (event) => {
     event.preventDefault();
+    window.localStorage.removeItem('bloglistUser');
     setUser(null);
   };
   return (
