@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import blogsService from '../services/blogs';
 
-const NewBlogForm = ({ blogs, setBlogs }) => {
+const NewBlogForm = ({ blogs, setBlogs, makeNotification }) => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
@@ -12,11 +12,21 @@ const NewBlogForm = ({ blogs, setBlogs }) => {
 
   const addNewBlog = async (event) => {
     event.preventDefault();
-    const savedBlog = await blogsService.create({ title, author, url });
-    setTitle('');
-    setAuthor('');
-    setUrl('');
-    setBlogs(blogs.concat(savedBlog));
+
+    try {
+      const savedBlog = await blogsService.create({
+        title,
+        author,
+        url,
+      });
+      setTitle('');
+      setAuthor('');
+      setUrl('');
+      setBlogs(blogs.concat(savedBlog));
+      makeNotification(`a new blog: ${savedBlog.title} by ${savedBlog.author}`, 'green');
+    } catch (e) {
+      makeNotification(e.response.data.error, 'red');
+    }
   };
 
   return (

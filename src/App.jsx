@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import LoginForm from './components/LoginForm';
 import Blogs from './components/Blogs';
 import blogsService from './services/blogs';
-// import logger from './utils/logger';
-// import loginService from './services/login';
+import Notification from './components/Notification';
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [timeoutInstance, setTimeoutInstance] = useState(null);
 
   useEffect(() => {
     const userJSON = window.localStorage.getItem('bloglistUser');
@@ -17,12 +18,34 @@ const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+    clearTimeout(timeoutInstance);
+    setTimeoutInstance(setTimeout(() => {
+      setNotificationMessage(null);
+    }, 5000));
+  }, [notificationMessage]);
+
+  const makeNotification = (message, color) => {
+    setNotificationMessage({
+      message,
+      color,
+    });
+  };
+
   return (
     <div>
       {
         user === null
-          ? (<LoginForm setUser={setUser} />)
-          : (<Blogs user={user.name} setUser={setUser} />)
+          ? (<h2>login to application</h2>)
+          : (<h2>blogs</h2>)
+      }
+      {
+        notificationMessage && (<Notification message={notificationMessage} />)
+      }
+      {
+        user === null
+          ? (<LoginForm setUser={setUser} makeNotification={makeNotification} />)
+          : (<Blogs user={user.name} setUser={setUser} makeNotification={makeNotification} />)
       }
     </div>
   );

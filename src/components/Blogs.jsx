@@ -4,7 +4,7 @@ import LoginInfo from './LoginInfo';
 import NewBlogForm from './NewBlogForm';
 import blogsService from '../services/blogs';
 
-const Blogs = ({ user, setUser }) => {
+const Blogs = ({ user, setUser, makeNotification }) => {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
@@ -13,13 +13,13 @@ const Blogs = ({ user, setUser }) => {
       setBlogs(blogsToSave);
     })();
   }, []);
+
   return (
     <div>
-      <h2>blogs</h2>
       <LoginInfo user={user} setUser={setUser} />
       <br />
       <h3>create new</h3>
-      <NewBlogForm blogs={blogs} setBlogs={setBlogs} />
+      <NewBlogForm blogs={blogs} setBlogs={setBlogs} makeNotification={makeNotification} />
       {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
     </div>
   );

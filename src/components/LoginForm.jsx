@@ -3,27 +3,32 @@ import loginService from '../services/login';
 import logger from '../utils/logger';
 import blogsService from '../services/blogs';
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ setUser, makeNotification }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    logger.info('logging in with', username, password);
-    const user = await loginService.login({
-      username,
-      password,
-    });
-    setUsername('');
-    setPassword('');
-    setUser(user);
-    window.localStorage.setItem('bloglistUser', JSON.stringify(user));
-    blogsService.setToken(user.token);
+    try {
+      logger.info('logging in with', username, password);
+      const user = await loginService.login({
+        username,
+        password,
+      });
+      setUsername('');
+      setPassword('');
+      setUser(user);
+      window.localStorage.setItem('bloglistUser', JSON.stringify(user));
+      blogsService.setToken(user.token);
+      makeNotification(`Welcome ${user.name}`, 'green');
+    } catch (e) {
+      logger.error(e.response.data);
+      makeNotification(e.response.data.error, 'red');
+    }
   };
 
   return (
     <div>
-      <h2>log in to application</h2>
       <form onSubmit={handleLogin}>
         <div>
           {'username '}
