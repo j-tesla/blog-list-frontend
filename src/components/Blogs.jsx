@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Blog from './Blog';
+import LoginInfo from './LoginInfo';
+import NewBlogForm from './NewBlogForm';
+import blogsService from '../services/blogs';
 
-const Blogs = ({ blogs, user, setUser }) => {
-  const handleClick = (event) => {
-    event.preventDefault();
-    window.localStorage.removeItem('bloglistUser');
-    setUser(null);
-  };
+const Blogs = ({ user, setUser }) => {
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const blogsToSave = await blogsService.getAll();
+      setBlogs(blogsToSave);
+    })();
+  }, []);
   return (
     <div>
       <h2>blogs</h2>
-      {`${user} logged in `}
-      <button onClick={handleClick} type="button">logout</button>
+      <LoginInfo user={user} setUser={setUser} />
       <br />
-      <br />
+      <h3>create new</h3>
+      <NewBlogForm blogs={blogs} setBlogs={setBlogs} />
       {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
     </div>
   );

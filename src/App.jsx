@@ -7,14 +7,6 @@ import blogsService from './services/blogs';
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [blogs, setBlogs] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      const blogsToSave = await blogsService.getAll();
-      setBlogs(blogsToSave);
-    })();
-  }, []);
 
   useEffect(() => {
     const userJSON = window.localStorage.getItem('bloglistUser');
@@ -23,14 +15,14 @@ const App = () => {
       blogsService.setToken(userObj.token);
       setUser(userObj);
     }
-  });
+  }, []);
 
   return (
     <div>
       {
         user === null
           ? (<LoginForm setUser={setUser} />)
-          : (<Blogs blogs={blogs} user={user.name} setUser={setUser} />)
+          : (<Blogs user={user.name} setUser={setUser} />)
       }
     </div>
   );
