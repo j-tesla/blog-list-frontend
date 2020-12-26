@@ -39,6 +39,7 @@ const LoginForm = ({ setUser, makeNotification }) => {
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
+
         <div>
           {'password '}
           <input
@@ -48,6 +49,7 @@ const LoginForm = ({ setUser, makeNotification }) => {
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
+
         <button type="submit">login</button>
       </form>
     </div>

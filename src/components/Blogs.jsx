@@ -22,19 +22,32 @@ const Blogs = ({ user, setUser, makeNotification }) => {
     newBlogRef.current.toggleVisibility();
   };
 
+  // css
+  const paddedDivStyle = {
+    paddingTop: 10,
+    paddingBottom: 10,
+  };
+
   return (
     <div>
-      <LoginInfo user={user} setUser={setUser} />
-      <br />
-      <Toggleable buttonLabel="new blog" ref={newBlogRef}>
-        <NewBlogForm
-          blogs={blogs}
-          setBlogs={setBlogs}
-          makeNotification={makeNotification}
-          toggleVisibility={toggleVisibility}
-        />
-      </Toggleable>
-      {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
+      <div style={paddedDivStyle}>
+        <LoginInfo user={user} setUser={setUser} />
+      </div>
+
+      <div style={paddedDivStyle}>
+        <Toggleable buttonLabel="new blog" ref={newBlogRef}>
+          <NewBlogForm
+            blogs={blogs}
+            setBlogs={setBlogs}
+            makeNotification={makeNotification}
+            toggleVisibility={toggleVisibility}
+          />
+        </Toggleable>
+      </div>
+
+      <div style={paddedDivStyle}>
+        {blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
+      </div>
     </div>
   );
 };
