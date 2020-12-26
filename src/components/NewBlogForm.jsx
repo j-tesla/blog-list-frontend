@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import blogsService from '../services/blogs';
 
-const NewBlogForm = ({ blogs, setBlogs, makeNotification }) => {
+const NewBlogForm = ({
+  blogs, setBlogs, makeNotification, toggleVisibility,
+}) => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
@@ -22,6 +24,7 @@ const NewBlogForm = ({ blogs, setBlogs, makeNotification }) => {
       setTitle('');
       setAuthor('');
       setUrl('');
+      toggleVisibility();
       setBlogs(blogs.concat(savedBlog));
       makeNotification(`a new blog: ${savedBlog.title} by ${savedBlog.author}`, 'green');
     } catch (e) {
@@ -30,23 +33,26 @@ const NewBlogForm = ({ blogs, setBlogs, makeNotification }) => {
   };
 
   return (
-    <form onSubmit={addNewBlog}>
-      <div>
-        {'title: '}
-        <input value={title} onChange={handleChange(setTitle)} />
-      </div>
-      <div>
-        {'author: '}
-        <input value={author} onChange={handleChange(setAuthor)} />
-      </div>
-      <div>
-        {'url: '}
-        <input value={url} onChange={handleChange(setUrl)} />
-      </div>
-      <div>
-        <button type="submit">create</button>
-      </div>
-    </form>
+    <div>
+      <h3>create new</h3>
+      <form onSubmit={addNewBlog}>
+        <div>
+          {'title: '}
+          <input value={title} onChange={handleChange(setTitle)} />
+        </div>
+        <div>
+          {'author: '}
+          <input value={author} onChange={handleChange(setAuthor)} />
+        </div>
+        <div>
+          {'url: '}
+          <input value={url} onChange={handleChange(setUrl)} />
+        </div>
+        <div>
+          <button type="submit">create</button>
+        </div>
+      </form>
+    </div>
   );
 };
 
