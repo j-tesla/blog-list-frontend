@@ -8,7 +8,7 @@ const LoginInfo = ({ user, setUser }) => {
   };
   return (
     <div>
-      {`${user} logged in `}
+      {`${user.name} logged in `}
       <button onClick={handleClick} type="button">logout</button>
       <br />
     </div>

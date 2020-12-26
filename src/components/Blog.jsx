@@ -1,8 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import Toggleable from './Toggleable';
 import blogsService from '../services/blogs';
 
-const Blog = ({ blog, makeNotification }) => {
+const Blog = ({
+  blog, makeNotification, likeBlog, removeBlog, owned,
+}) => {
+  // css
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -10,8 +13,6 @@ const Blog = ({ blog, makeNotification }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
-
-  const [likes, setLikes] = useState(blog.likes);
 
   // ref to Toggleable
   const blogRef = useRef();
@@ -21,10 +22,19 @@ const Blog = ({ blog, makeNotification }) => {
 
   const handleLike = async () => {
     try {
-      const updatedBlog = await blogsService.update(blog.id, { likes: likes + 1 });
-      setLikes(updatedBlog.likes);
+      await blogsService.update(blog.id, { likes: blog.likes + 1 });
+      likeBlog(blog.id);
     } catch (e) {
       makeNotification(e.response.data.error, 'red');
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (window.confirm(`remove blog '${blog.title}' by ${blog.author}?`)) await blogsService.delete(blog.id);
+      removeBlog(blog.id);
+    } catch (e) {
+      if (e.response.status === 403) makeNotification('not your blog to delete, mate!', 'red');
     }
   };
 
@@ -36,10 +46,12 @@ const Blog = ({ blog, makeNotification }) => {
         <div>
           <a href={blog.url}>{blog.url}</a>
           <br />
-          {`likes: ${likes} `}
+          {`likes: ${blog.likes} `}
           <button type="button" onClick={handleLike}>like</button>
           <br />
           {`added by ${blog.user.name}`}
+          <br />
+          {owned && (<button type="button" onClick={handleDelete}>delete</button>)}
         </div>
       </Toggleable>
     </div>

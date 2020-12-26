@@ -45,7 +45,7 @@ const App = () => {
       {
         user === null
           ? (<LoginForm setUser={setUser} makeNotification={makeNotification} />)
-          : (<Blogs user={user.name} setUser={setUser} makeNotification={makeNotification} />)
+          : (<Blogs user={user} setUser={setUser} makeNotification={makeNotification} />)
       }
     </div>
   );

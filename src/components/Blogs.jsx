@@ -6,12 +6,20 @@ import Toggleable from './Toggleable';
 import blogsService from '../services/blogs';
 
 const Blogs = ({ user, setUser, makeNotification }) => {
+  // css
+  const paddedDivStyle = {
+    paddingTop: 10,
+    paddingBottom: 10,
+  };
+
+  // states
   const [blogs, setBlogs] = useState([]);
 
   // get blogs from backend on first render
   useEffect(() => {
     (async () => {
       const blogsToSave = await blogsService.getAll();
+      blogsToSave.sort((blagA, blogB) => (blagA.likes - blogB.likes));
       setBlogs(blogsToSave);
     })();
   }, []);
@@ -22,10 +30,13 @@ const Blogs = ({ user, setUser, makeNotification }) => {
     newBlogRef.current.toggleVisibility();
   };
 
-  // css
-  const paddedDivStyle = {
-    paddingTop: 10,
-    paddingBottom: 10,
+  const removeBlog = (id) => {
+    setBlogs(blogs.filter((blog) => blog.id !== id));
+  };
+
+  const likeBlog = (id) => {
+    setBlogs(blogs.map((blog) => (blog.id === id ? { ...blog, likes: blog.likes + 1 } : blog))
+      .sort((blogA, blogB) => (blogA.likes - blogB.likes)));
   };
 
   return (
@@ -51,6 +62,9 @@ const Blogs = ({ user, setUser, makeNotification }) => {
             key={blog.id}
             blog={blog}
             makeNotification={makeNotification}
+            likeBlog={likeBlog}
+            removeBlog={removeBlog}
+            owned={user.username === blog.user.username}
           />
         ))}
       </div>

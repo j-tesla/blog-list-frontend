@@ -20,5 +20,7 @@ module.exports = {
   rules: {
     'no-shadow': 'off',
     'react/prop-types': 'off',
+    'no-underscore-dangle': 'off',
+    'no-alert': 'off',
   },
 };
