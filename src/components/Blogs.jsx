@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useEffect, useState, useRef } from 'react';
 import Blog from './Blog';
 import LoginInfo from './LoginInfo';
@@ -70,6 +71,15 @@ const Blogs = ({ user, setUser, makeNotification }) => {
       </div>
     </div>
   );
+};
+
+Blogs.propTypes = {
+  makeNotification: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Blogs;

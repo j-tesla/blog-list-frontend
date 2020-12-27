@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import customPropTypes from '../utils/customPropTypes';
 import blogsService from '../services/blogs';
 
 const NewBlogForm = ({
@@ -57,6 +59,13 @@ const NewBlogForm = ({
       </form>
     </div>
   );
+};
+
+NewBlogForm.propTypes = {
+  blogs: PropTypes.arrayOf(customPropTypes.blog).isRequired,
+  setBlogs: PropTypes.func.isRequired,
+  makeNotification: PropTypes.func.isRequired,
+  toggleVisibility: PropTypes.func.isRequired,
 };
 
 export default NewBlogForm;

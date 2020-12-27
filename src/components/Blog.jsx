@@ -1,4 +1,6 @@
 import React, { useRef } from 'react';
+import PropTypes from 'prop-types';
+import customPropTypes from '../utils/customPropTypes';
 import Toggleable from './Toggleable';
 import blogsService from '../services/blogs';
 
@@ -56,6 +58,14 @@ const Blog = ({
       </Toggleable>
     </div>
   );
+};
+
+Blog.propTypes = {
+  blog: customPropTypes.blog.isRequired,
+  likeBlog: PropTypes.func.isRequired,
+  makeNotification: PropTypes.func.isRequired,
+  owned: PropTypes.bool.isRequired,
+  removeBlog: PropTypes.func.isRequired,
 };
 
 export default Blog;

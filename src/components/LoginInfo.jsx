@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import customPropTypes from '../utils/customPropTypes';
 
 const LoginInfo = ({ user, setUser }) => {
   const handleClick = (event) => {
@@ -16,3 +18,8 @@ const LoginInfo = ({ user, setUser }) => {
 };
 
 export default LoginInfo;
+
+LoginInfo.propTypes = {
+  setUser: PropTypes.func.isRequired,
+  user: customPropTypes.user.isRequired,
+};
