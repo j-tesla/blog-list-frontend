@@ -46,15 +46,15 @@ const Blog = ({
         {`${blog.title} -${blog.author}`}
       </div>
       <Toggleable buttonLabel="view" cancelButton={false} ref={blogRef}>
-        <button type="button" onClick={toggleVisibility}>hide</button>
+        <button className="hideButton" type="button" onClick={toggleVisibility}>hide</button>
         <div className="blogDetails">
           <div className="blogUrl"><a href={blog.url}>{blog.url}</a></div>
           <div className="blogLikes">
             {`likes: ${blog.likes} `}
-            <button type="button" onClick={handleLike}>like</button>
+            <button className="likeButton" type="button" onClick={handleLike}>like</button>
           </div>
           <div className="blogUser">{`added by ${blog.user.name}`}</div>
-          {owned && (<button type="button" onClick={handleDelete}>delete</button>)}
+          {owned && (<button className="deleteButton" type="button" onClick={handleDelete}>delete</button>)}
         </div>
       </Toggleable>
     </div>

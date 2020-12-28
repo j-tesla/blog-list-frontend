@@ -40,6 +40,10 @@ const Blogs = ({ user, setUser, makeNotification }) => {
       .sort((blogA, blogB) => (blogA.likes - blogB.likes)));
   };
 
+  const addBlog = (blog) => {
+    setBlogs(blogs.concat(blog));
+  };
+
   return (
     <div>
       <div style={paddedDivStyle}>
@@ -49,8 +53,7 @@ const Blogs = ({ user, setUser, makeNotification }) => {
       <div style={paddedDivStyle}>
         <Toggleable buttonLabel="new blog" ref={newBlogRef}>
           <NewBlogForm
-            blogs={blogs}
-            setBlogs={setBlogs}
+            addBlog={addBlog}
             makeNotification={makeNotification}
             toggleVisibility={toggleVisibility}
           />

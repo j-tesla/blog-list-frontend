@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import customPropTypes from '../utils/customPropTypes';
 import blogsService from '../services/blogs';
 
 const NewBlogForm = ({
-  blogs, setBlogs, makeNotification, toggleVisibility,
+  addBlog, makeNotification, toggleVisibility,
 }) => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -27,7 +26,7 @@ const NewBlogForm = ({
       setAuthor('');
       setUrl('');
       toggleVisibility();
-      setBlogs(blogs.concat(savedBlog));
+      addBlog(savedBlog);
       makeNotification(`a new blog: ${savedBlog.title} by ${savedBlog.author}`, 'green');
     } catch (e) {
       makeNotification(e.response.data.error, 'red');
@@ -40,17 +39,17 @@ const NewBlogForm = ({
       <form onSubmit={addNewBlog}>
         <div>
           {'title: '}
-          <input value={title} onChange={handleChange(setTitle)} />
+          <input id="title" value={title} onChange={handleChange(setTitle)} />
         </div>
 
         <div>
           {'author: '}
-          <input value={author} onChange={handleChange(setAuthor)} />
+          <input id="author" value={author} onChange={handleChange(setAuthor)} />
         </div>
 
         <div>
           {'url: '}
-          <input value={url} onChange={handleChange(setUrl)} />
+          <input id="url" value={url} onChange={handleChange(setUrl)} />
         </div>
 
         <div>
@@ -62,8 +61,7 @@ const NewBlogForm = ({
 };
 
 NewBlogForm.propTypes = {
-  blogs: PropTypes.arrayOf(customPropTypes.blog).isRequired,
-  setBlogs: PropTypes.func.isRequired,
+  addBlog: PropTypes.func.isRequired,
   makeNotification: PropTypes.func.isRequired,
   toggleVisibility: PropTypes.func.isRequired,
 };
