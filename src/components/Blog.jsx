@@ -41,18 +41,19 @@ const Blog = ({
   };
 
   return (
-    <div style={blogStyle}>
-      {`${blog.title} -${blog.author}`}
+    <div style={blogStyle} className="blog">
+      <div className="blogHead">
+        {`${blog.title} -${blog.author}`}
+      </div>
       <Toggleable buttonLabel="view" cancelButton={false} ref={blogRef}>
         <button type="button" onClick={toggleVisibility}>hide</button>
-        <div>
-          <a href={blog.url}>{blog.url}</a>
-          <br />
-          {`likes: ${blog.likes} `}
-          <button type="button" onClick={handleLike}>like</button>
-          <br />
-          {`added by ${blog.user.name}`}
-          <br />
+        <div className="blogDetails">
+          <div className="blogUrl"><a href={blog.url}>{blog.url}</a></div>
+          <div className="blogLikes">
+            {`likes: ${blog.likes} `}
+            <button type="button" onClick={handleLike}>like</button>
+          </div>
+          <div className="blogUser">{`added by ${blog.user.name}`}</div>
           {owned && (<button type="button" onClick={handleDelete}>delete</button>)}
         </div>
       </Toggleable>
