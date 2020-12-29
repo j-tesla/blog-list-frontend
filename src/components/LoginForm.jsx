@@ -30,10 +30,11 @@ const LoginForm = ({ setUser, makeNotification }) => {
 
   return (
     <div>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleLogin} id="loginForm">
         <div>
           {'username '}
           <input
+            id="username"
             type="text"
             value={username}
             name="Username"
@@ -44,6 +45,7 @@ const LoginForm = ({ setUser, makeNotification }) => {
         <div>
           {'password '}
           <input
+            id="password"
             type="password"
             value={password}
             name="Password"
