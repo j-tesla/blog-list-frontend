@@ -23,6 +23,8 @@ const LoginForm = ({ setUser, makeNotification }) => {
       blogsService.setToken(user.token);
       makeNotification(`Welcome ${user.name}`, 'green');
     } catch (e) {
+      setUsername('');
+      setPassword('');
       logger.error(e.response.data);
       makeNotification(e.response.data.error, 'red');
     }
@@ -53,7 +55,7 @@ const LoginForm = ({ setUser, makeNotification }) => {
           />
         </div>
 
-        <button type="submit">login</button>
+        <button id="loginButton" type="submit">login</button>
       </form>
     </div>
   );
