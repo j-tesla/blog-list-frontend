@@ -53,5 +53,33 @@ describe('Blog app', function () {
       cy.get('button').contains('create').click();
       cy.get('.blog').contains('First Blog');
     });
+
+    it('created blog can be liked', function () {
+      cy.contains('new blog').click();
+      cy.get('input#title').type('First Blog');
+      cy.get('input#author').type('Jay PSY');
+      cy.get('input#url').type('http://localhost:3652/first-blog');
+      cy.get('button').contains('create').click();
+      cy.get('.blog').contains('First Blog').siblings().get('button')
+        .contains('view')
+        .click();
+
+      // get initial likes
+      let likesCount;
+      cy.get('.blogLikes').should(function ($div) {
+        const text = $div.text();
+        likesCount = parseInt(text.match(/\d+/)[0], 10);
+      });
+
+      // click like button
+      cy.get('.blog').contains('First Blog').siblings().get('button')
+        .contains('like')
+        .click();
+
+      cy.get('.blogLikes').should(function ($div) {
+        const text = $div.text();
+        expect(text).to.include(likesCount + 1);
+      });
+    });
   });
 });
