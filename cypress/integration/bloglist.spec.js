@@ -25,14 +25,33 @@ describe('Blog app', function () {
       cy.get('input#password').type(user.password);
       cy.get('#loginButton').click();
       cy.contains('Jayanth PSY');
-      cy.get('#loginForm').should('not.exist');
+      cy.get('button').contains('login').should('not.exist');
     });
 
     it('fails with wrong credentials', function () {
       cy.get('input#username').type(user.username);
       cy.get('input#password').type('wrong-password');
-      cy.get('#loginButton').click();
+      cy.get('button').contains('login').click();
       cy.contains('Invalid username or password').should('have.css', 'color', 'rgb(255, 0, 0)');
+    });
+  });
+
+  describe.only('When logged in', function () {
+    beforeEach(function () {
+      cy.request('POST', '/api/login', user)
+        .then(function (response) {
+          localStorage.setItem('bloglistUser', JSON.stringify(response.body));
+        });
+      cy.visit('/');
+    });
+
+    it('A blog can be created', function () {
+      cy.contains('new blog').click();
+      cy.get('input#title').type('First Blog');
+      cy.get('input#author').type('Jay PSY');
+      cy.get('input#url').type('http://localhost:3652/first-blog');
+      cy.get('button').contains('create').click();
+      cy.get('.blog').contains('First Blog');
     });
   });
 });
