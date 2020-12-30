@@ -1,4 +1,4 @@
-/* eslint-disable prefer-arrow-callback,func-names */
+/* eslint-disable prefer-arrow-callback,func-names,no-restricted-syntax,no-loop-func */
 
 describe('Blog app', function () {
   let user;
@@ -50,11 +50,11 @@ describe('Blog app', function () {
     });
   });
 
-  describe.only('When logged in', function () {
+  describe('When logged in', function () {
     beforeEach(function () {
       cy.request('POST', '/api/login', user)
         .then(function (response) {
-          localStorage.setItem('bloglistUser', JSON.stringify(response.body));
+          window.localStorage.setItem('bloglistUser', JSON.stringify(response.body));
         });
       cy.visit('/');
     });
@@ -109,7 +109,7 @@ describe('Blog app', function () {
         // get initial likes
         let likesCount;
         cy.get('.blogLikes')
-          .should(function ($div) {
+          .then(function ($div) {
             const text = $div.text();
             likesCount = parseInt(text.match(/\d+/)[0], 10);
           });
@@ -146,9 +146,46 @@ describe('Blog app', function () {
           .contains('delete')
           .click();
 
-        cy.get('.blog').contains('First Blog')
+        cy.get('.blog')
+          .contains('First Blog')
           .should('not.exist');
       });
+    });
+
+    it('blogs are displayed sorted by likes', function () {
+      const blogs = [];
+      const authors = ['C V Raman', 'A P J Abdul Kalam', 'Homi J Bhabha', 'S Ramanujan', 'Meghnad Saha', 'S N Bose'];
+      for (let i = 0; i < 10; i += 1) {
+        blogs.push({
+          title: `Science Blog ${i}`,
+          author: authors[Math.floor(Math.random() * authors.length)],
+          url: `https://localhost:3652/blog${i}`,
+          likes: Math.floor(Math.random() * 100),
+        });
+      }
+      blogs.forEach(function (blog) {
+        cy.request({
+          url: '/api/blogs',
+          method: 'POST',
+          body: blog,
+          headers: {
+            Authorization: `bearer ${JSON.parse(localStorage.getItem('bloglistUser')).token}`,
+          },
+        });
+      });
+
+      cy.visit('/');
+
+      let prevLikes = 10e9;
+      let likesCount;
+      for (let i = 0; i < 10; i += 1) {
+        cy.get('.blogLikes').eq(i).then(function ($div) {
+          const text = $div.text();
+          likesCount = parseInt(text.match(/\d+/)[0], 10);
+          expect(likesCount - 1).to.be.lessThan(prevLikes);
+          prevLikes = likesCount;
+        });
+      }
     });
   });
 });

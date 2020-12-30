@@ -20,7 +20,7 @@ const Blogs = ({ user, setUser, makeNotification }) => {
   useEffect(() => {
     (async () => {
       const blogsToSave = await blogsService.getAll();
-      blogsToSave.sort((blagA, blogB) => (blagA.likes - blogB.likes));
+      blogsToSave.sort((blogA, blogB) => (blogB.likes - blogA.likes));
       setBlogs(blogsToSave);
     })();
   }, []);
@@ -37,7 +37,7 @@ const Blogs = ({ user, setUser, makeNotification }) => {
 
   const likeBlog = (id) => {
     setBlogs(blogs.map((blog) => (blog.id === id ? { ...blog, likes: blog.likes + 1 } : blog))
-      .sort((blogA, blogB) => (blogA.likes - blogB.likes)));
+      .sort((blogA, blogB) => (blogB.likes - blogA.likes)));
   };
 
   const addBlog = (blog) => {
