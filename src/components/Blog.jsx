@@ -1,12 +1,16 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+
 import customPropTypes from '../utils/customPropTypes';
 import Toggleable from './Toggleable';
 import blogsService from '../services/blogs';
+import { makeNotification } from '../reducers/notificationReducer';
 
 const Blog = ({
-  blog, makeNotification, likeBlog, removeBlog, owned,
+  blog, likeBlog, removeBlog, owned,
 }) => {
+  const dispatch = useDispatch();
   // css
   const blogStyle = {
     paddingTop: 10,
@@ -27,7 +31,7 @@ const Blog = ({
       await blogsService.update(blog.id, { likes: blog.likes + 1 });
       likeBlog(blog.id);
     } catch (e) {
-      makeNotification(e.response.data.error, 'red');
+      dispatch(makeNotification({ message: e.response.data.error, color: 'red' }));
     }
   };
 
@@ -36,7 +40,7 @@ const Blog = ({
       if (window.confirm(`remove blog '${blog.title}' by ${blog.author}?`)) await blogsService.delete(blog.id);
       removeBlog(blog.id);
     } catch (e) {
-      if (e.response.status === 403) makeNotification('not your blog to delete, mate!', 'red');
+      if (e.response.status === 403) dispatch(makeNotification({ message: 'not your blog to delete, mate!', color: 'red' }));
     }
   };
 
@@ -64,7 +68,6 @@ const Blog = ({
 Blog.propTypes = {
   blog: customPropTypes.blog.isRequired,
   likeBlog: PropTypes.func.isRequired,
-  makeNotification: PropTypes.func.isRequired,
   owned: PropTypes.bool.isRequired,
   removeBlog: PropTypes.func.isRequired,
 };

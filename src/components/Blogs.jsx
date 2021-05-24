@@ -6,7 +6,10 @@ import NewBlogForm from './NewBlogForm';
 import Toggleable from './Toggleable';
 import blogsService from '../services/blogs';
 
-const Blogs = ({ user, setUser, makeNotification }) => {
+const Blogs = ({
+  user,
+  setUser,
+}) => {
   // css
   const paddedDivStyle = {
     paddingTop: 10,
@@ -36,7 +39,10 @@ const Blogs = ({ user, setUser, makeNotification }) => {
   };
 
   const likeBlog = (id) => {
-    setBlogs(blogs.map((blog) => (blog.id === id ? { ...blog, likes: blog.likes + 1 } : blog))
+    setBlogs(blogs.map((blog) => (blog.id === id ? {
+      ...blog,
+      likes: blog.likes + 1,
+    } : blog))
       .sort((blogA, blogB) => (blogB.likes - blogA.likes)));
   };
 
@@ -54,7 +60,6 @@ const Blogs = ({ user, setUser, makeNotification }) => {
         <Toggleable buttonLabel="new blog" ref={newBlogRef}>
           <NewBlogForm
             addBlog={addBlog}
-            makeNotification={makeNotification}
             toggleVisibility={toggleVisibility}
           />
         </Toggleable>
@@ -65,7 +70,6 @@ const Blogs = ({ user, setUser, makeNotification }) => {
           <Blog
             key={blog.id}
             blog={blog}
-            makeNotification={makeNotification}
             likeBlog={likeBlog}
             removeBlog={removeBlog}
             owned={user.username === blog.user.username}
@@ -77,7 +81,6 @@ const Blogs = ({ user, setUser, makeNotification }) => {
 };
 
 Blogs.propTypes = {
-  makeNotification: PropTypes.func.isRequired,
   setUser: PropTypes.func.isRequired,
   user: PropTypes.shape({
     name: PropTypes.string.isRequired,
