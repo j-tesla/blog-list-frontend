@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,24 +8,20 @@ import Toggleable from './Toggleable';
 // import blogsService from '../services/blogs';
 import { initialiseBlogs } from '../reducers/blogReducer';
 
-const Blogs = ({
-  user,
-  setUser,
-}) => {
+const Blogs = () => {
   const dispatch = useDispatch();
+  const { activeUser, blogs } = useSelector((state) => (state));
+
   // css
   const paddedDivStyle = {
     paddingTop: 10,
     paddingBottom: 10,
   };
 
-  // states
-  const blogs = useSelector((state) => state.blogs);
-
   // get blogs from backend on first render
   useEffect(() => {
     dispatch(initialiseBlogs());
-  }, []);
+  }, [dispatch]);
 
   // ref to Toggleable
   const newBlogRef = useRef(null);
@@ -37,7 +32,7 @@ const Blogs = ({
   return (
     <div>
       <div style={paddedDivStyle}>
-        <LoginInfo user={user} setUser={setUser} />
+        <LoginInfo />
       </div>
 
       <div style={paddedDivStyle}>
@@ -53,7 +48,7 @@ const Blogs = ({
           <Blog
             key={blog.id}
             blog={blog}
-            owned={user.username === blog.user.username}
+            owned={activeUser.username === blog.user.username}
           />
         ))}
       </div>
@@ -62,11 +57,6 @@ const Blogs = ({
 };
 
 Blogs.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-  }).isRequired,
 };
 
 export default Blogs;

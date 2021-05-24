@@ -6,7 +6,7 @@ const blogReducer = (state = [], action) => {
       return action.data
         .sort((a, b) => (b.likes - a.likes));
     }
-    case 'NEW_BLOG':
+    case 'ADD_BLOG':
       return [...state, action.data].sort((a, b) => (b.likes - a.likes));
     case 'INCREMENT_LIKES': {
       const { id } = action.data;
@@ -31,7 +31,7 @@ const blogReducer = (state = [], action) => {
 export const createBlog = (blog) => async (dispatch) => {
   const data = await blogsService.create(blog);
   dispatch({
-    type: 'NEW_BLOG',
+    type: 'ADD_BLOG',
     data,
   });
 };
