@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Blog from './Blog';
-import LoginInfo from './LoginInfo';
 import NewBlogForm from './NewBlogForm';
 import Toggleable from './Toggleable';
 // import blogsService from '../services/blogs';
@@ -31,10 +30,6 @@ const Blogs = () => {
 
   return (
     <div>
-      <div style={paddedDivStyle}>
-        <LoginInfo />
-      </div>
-
       <div style={paddedDivStyle}>
         <Toggleable buttonLabel="new blog" ref={newBlogRef}>
           <NewBlogForm
