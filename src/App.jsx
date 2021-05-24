@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import LoginForm from './components/LoginForm';
 import Blogs from './components/Blogs';
@@ -10,6 +10,8 @@ import Users from './components/Users';
 import LoginInfo from './components/LoginInfo';
 import User from './components/User';
 import { initialiseUsers } from './reducers/userReducer';
+import Blog from './components/Blog';
+import { initialiseBlogs } from './reducers/blogReducer';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -18,6 +20,7 @@ const App = () => {
   useEffect(() => {
     dispatch(initialiseLogin());
     dispatch(initialiseUsers());
+    dispatch(initialiseBlogs());
   }, [dispatch]);
 
   // css
@@ -42,14 +45,20 @@ const App = () => {
               <h1>blogs</h1>
               <LoginInfo />
               <Switch>
+                <Route path="/blogs/:id">
+                  <Blog />
+                </Route>
                 <Route path="/users/:id">
                   <User />
                 </Route>
                 <Route path="/users">
                   <Users />
                 </Route>
-                <Route path="/">
+                <Route path="/blogs">
                   <Blogs />
+                </Route>
+                <Route path="/">
+                  <Redirect to="/blogs" />
                 </Route>
               </Switch>
             </div>

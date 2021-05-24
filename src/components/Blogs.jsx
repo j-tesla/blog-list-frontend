@@ -1,26 +1,26 @@
-import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useRef } from 'react';
+import { useSelector } from 'react-redux';
 
-import Blog from './Blog';
+import { Link } from 'react-router-dom';
 import NewBlogForm from './NewBlogForm';
 import Toggleable from './Toggleable';
 // import blogsService from '../services/blogs';
-import { initialiseBlogs } from '../reducers/blogReducer';
 
 const Blogs = () => {
-  const dispatch = useDispatch();
-  const { activeUser, blogs } = useSelector((state) => (state));
+  const { blogs } = useSelector((state) => (state));
 
   // css
   const paddedDivStyle = {
     paddingTop: 10,
     paddingBottom: 10,
   };
-
-  // get blogs from backend on first render
-  useEffect(() => {
-    dispatch(initialiseBlogs());
-  }, [dispatch]);
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5,
+  };
 
   // ref to Toggleable
   const newBlogRef = useRef(null);
@@ -40,11 +40,10 @@ const Blogs = () => {
 
       <div style={paddedDivStyle}>
         {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            owned={activeUser.username === blog.user.username}
-          />
+          <div style={blogStyle} key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+            {` by ${blog.author}`}
+          </div>
         ))}
       </div>
     </div>

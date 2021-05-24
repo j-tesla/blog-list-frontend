@@ -1,29 +1,25 @@
-import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-import customPropTypes from '../utils/customPropTypes';
-import Toggleable from './Toggleable';
 import { makeNotification } from '../reducers/notificationReducer';
 import { likeBlog, removeBlog } from '../reducers/blogReducer';
 
-const Blog = ({
-  blog, owned,
-}) => {
+const Blog = () => {
   const dispatch = useDispatch();
-  // css
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  };
+  const { id } = useParams();
+  const { blog, activeUser } = useSelector((state) => ({
+    blog: state.blogs.find((blog) => blog.id.toString() === id), activeUser: state.activeUser,
+  }));
+  if (!blog) {
+    return null;
+  }
 
-  // ref to Toggleable
-  const blogRef = useRef();
-  const toggleVisibility = () => {
-    blogRef.current.toggleVisibility();
+  const owned = activeUser === blog.user.id;
+
+  // css
+  const padding = {
+    padding: 10,
   };
 
   const handleLike = async () => {
@@ -43,29 +39,24 @@ const Blog = ({
   };
 
   return (
-    <div style={blogStyle} className="blog">
-      <div className="blogHead">
-        {`${blog.title} -${blog.author}`}
-      </div>
-      <Toggleable buttonLabel="view" cancelButton={false} ref={blogRef}>
-        <button className="hideButton" type="button" onClick={toggleVisibility}>hide</button>
-        <div className="blogDetails">
-          <div className="blogUrl"><a href={blog.url}>{blog.url}</a></div>
-          <div className="blogLikes">
-            {`likes: ${blog.likes} `}
-            <button className="likeButton" type="button" onClick={handleLike}>like</button>
-          </div>
-          <div className="blogUser">{`added by ${blog.user.name}`}</div>
-          {owned && (<button className="deleteButton" type="button" onClick={handleDelete}>delete</button>)}
+    <div style={padding} className="blog">
+      <h3 className="blogHead">
+        {`${blog.title} by ${blog.author}`}
+      </h3>
+      <div className="blogDetails" style={padding}>
+        <div className="blogUrl"><a href={blog.url}>{blog.url}</a></div>
+        <div className="blogLikes">
+          {`likes: ${blog.likes} `}
+          <button className="likeButton" type="button" onClick={handleLike}>like</button>
         </div>
-      </Toggleable>
+        <div className="blogUser">{`added by ${blog.user.name}`}</div>
+        {owned && (<button className="deleteButton" type="button" onClick={handleDelete}>delete</button>)}
+      </div>
     </div>
   );
 };
 
 Blog.propTypes = {
-  blog: customPropTypes.blog.isRequired,
-  owned: PropTypes.bool.isRequired,
 };
 
 export default Blog;
