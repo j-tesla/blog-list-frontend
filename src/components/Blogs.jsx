@@ -1,15 +1,19 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Blog from './Blog';
 import LoginInfo from './LoginInfo';
 import NewBlogForm from './NewBlogForm';
 import Toggleable from './Toggleable';
-import blogsService from '../services/blogs';
+// import blogsService from '../services/blogs';
+import { initialiseBlogs } from '../reducers/blogReducer';
 
 const Blogs = ({
   user,
   setUser,
 }) => {
+  const dispatch = useDispatch();
   // css
   const paddedDivStyle = {
     paddingTop: 10,
@@ -17,37 +21,17 @@ const Blogs = ({
   };
 
   // states
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector((state) => state.blogs);
 
   // get blogs from backend on first render
   useEffect(() => {
-    (async () => {
-      const blogsToSave = await blogsService.getAll();
-      blogsToSave.sort((blogA, blogB) => (blogB.likes - blogA.likes));
-      setBlogs(blogsToSave);
-    })();
+    dispatch(initialiseBlogs());
   }, []);
 
   // ref to Toggleable
   const newBlogRef = useRef(null);
   const toggleVisibility = () => {
     newBlogRef.current.toggleVisibility();
-  };
-
-  const removeBlog = (id) => {
-    setBlogs(blogs.filter((blog) => blog.id !== id));
-  };
-
-  const likeBlog = (id) => {
-    setBlogs(blogs.map((blog) => (blog.id === id ? {
-      ...blog,
-      likes: blog.likes + 1,
-    } : blog))
-      .sort((blogA, blogB) => (blogB.likes - blogA.likes)));
-  };
-
-  const addBlog = (blog) => {
-    setBlogs(blogs.concat(blog));
   };
 
   return (
@@ -59,7 +43,6 @@ const Blogs = ({
       <div style={paddedDivStyle}>
         <Toggleable buttonLabel="new blog" ref={newBlogRef}>
           <NewBlogForm
-            addBlog={addBlog}
             toggleVisibility={toggleVisibility}
           />
         </Toggleable>
@@ -70,8 +53,6 @@ const Blogs = ({
           <Blog
             key={blog.id}
             blog={blog}
-            likeBlog={likeBlog}
-            removeBlog={removeBlog}
             owned={user.username === blog.user.username}
           />
         ))}

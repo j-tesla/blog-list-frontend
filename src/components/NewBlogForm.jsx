@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
-import blogsService from '../services/blogs';
 import { makeNotification } from '../reducers/notificationReducer';
+import { createBlog } from '../reducers/blogReducer';
 
-const NewBlogForm = ({
-  addBlog, toggleVisibility,
-}) => {
+const NewBlogForm = ({ toggleVisibility }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -21,17 +19,16 @@ const NewBlogForm = ({
     event.preventDefault();
 
     try {
-      const savedBlog = await blogsService.create({
+      dispatch(createBlog({
         title,
         author,
         url,
-      });
+      }));
       setTitle('');
       setAuthor('');
       setUrl('');
       toggleVisibility();
-      addBlog(savedBlog);
-      dispatch(makeNotification({ message: `a new blog: ${savedBlog.title} by ${savedBlog.author}`, color: 'green' }));
+      dispatch(makeNotification({ message: `a new blog: ${title} by ${author}`, color: 'green' }));
     } catch (e) {
       dispatch(makeNotification({ message: e.response.data.error, color: 'red' }));
     }
@@ -65,7 +62,6 @@ const NewBlogForm = ({
 };
 
 NewBlogForm.propTypes = {
-  addBlog: PropTypes.func.isRequired,
   toggleVisibility: PropTypes.func.isRequired,
 };
 
