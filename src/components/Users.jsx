@@ -1,20 +1,19 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import Blogs from './Blogs';
-import { initialiseUsers } from '../reducers/userReducer';
 
 const Users = () => {
-  const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
-
-  useEffect(() => {
-    dispatch(initialiseUsers());
-  }, [dispatch]);
 
   // css
   const paddedDivStyle = {
     paddingTop: 10,
     paddingBottom: 10,
+  };
+  const padding = {
+    padding: 5,
   };
   const tableStyle = {
     padding: 10,
@@ -38,7 +37,7 @@ const Users = () => {
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
-              <td>{user.name}</td>
+              <td><Link style={padding} to={`/users/${user.id}`}>{user.name}</Link></td>
               <td>{user.blogs.length}</td>
             </tr>
           ))}

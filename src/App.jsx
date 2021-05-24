@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  BrowserRouter as Router,
-  Switch, Route,
-} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import LoginForm from './components/LoginForm';
 import Blogs from './components/Blogs';
@@ -11,6 +8,8 @@ import Notifications from './components/Notifications';
 import { initialiseLogin } from './reducers/loginReducer';
 import Users from './components/Users';
 import LoginInfo from './components/LoginInfo';
+import User from './components/User';
+import { initialiseUsers } from './reducers/userReducer';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -18,6 +17,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initialiseLogin());
+    dispatch(initialiseUsers());
   }, [dispatch]);
 
   // css
@@ -27,7 +27,7 @@ const App = () => {
   };
 
   return (
-    <Router>
+    <div>
       <Notifications />
       {
         activeUser === null
@@ -42,6 +42,9 @@ const App = () => {
               <h1>blogs</h1>
               <LoginInfo />
               <Switch>
+                <Route path="/users/:id">
+                  <User />
+                </Route>
                 <Route path="/users">
                   <Users />
                 </Route>
@@ -52,7 +55,7 @@ const App = () => {
             </div>
           )
       }
-    </Router>
+    </div>
   );
 };
 

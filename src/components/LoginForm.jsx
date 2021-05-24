@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import logger from '../utils/logger';
 import { makeNotification } from '../reducers/notificationReducer';
 import { login } from '../reducers/loginReducer';
@@ -8,6 +10,7 @@ const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  const browserHistory = useHistory();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -17,6 +20,7 @@ const LoginForm = () => {
       setUsername('');
       setPassword('');
       dispatch(makeNotification({ message: `Welcome ${user.name}`, color: 'green' }));
+      browserHistory.push('/');
     } catch (e) {
       setUsername('');
       setPassword('');
