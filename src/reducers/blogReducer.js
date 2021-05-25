@@ -69,7 +69,7 @@ export const removeBlog = (blog) => async (dispatch) => {
 };
 
 export const commentBlog = (blog, comment) => async (dispatch) => {
-  const updatedBlog = await blogsService.comment(blog, comment);
+  const updatedBlog = await blogsService.comment(blog.id, comment);
   dispatch({
     type: 'UPDATE_BLOG',
     data: { blog: updatedBlog },
