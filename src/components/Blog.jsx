@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { makeNotification } from '../reducers/notificationReducer';
 import { likeBlog, removeBlog } from '../reducers/blogReducer';
+import NewCommentForm from './NewCommentForm';
 
 const Blog = () => {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const Blog = () => {
         <div className="blogUser">{`added by ${blog.user.name}`}</div>
         {owned && (<button className="deleteButton" type="button" onClick={handleDelete}>delete</button>)}
         <h4>comments</h4>
+        <NewCommentForm blog={blog} />
         <ul style={padding}>
           {
             Array.from(blog.comments.entries(), ([index, blog]) => (

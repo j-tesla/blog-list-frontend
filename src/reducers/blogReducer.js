@@ -22,6 +22,10 @@ const blogReducer = (state = [], action) => {
       const { id } = action.data;
       return state.filter((blog) => blog.id !== id);
     }
+    case 'UPDATE_BLOG': {
+      const { blog: savedBlog } = action.data;
+      return state.map((blog) => ((blog.id === savedBlog.id) ? (savedBlog) : (blog)));
+    }
     default: {
       return state.sort((a, b) => (b.likes - a.likes));
     }
@@ -61,6 +65,14 @@ export const removeBlog = (blog) => async (dispatch) => {
   dispatch({
     type: 'DELETE_BLOG',
     data: { id: blog.id },
+  });
+};
+
+export const commentBlog = (blog, comment) => async (dispatch) => {
+  const updatedBlog = await blogsService.comment(blog, comment);
+  dispatch({
+    type: 'UPDATE_BLOG',
+    data: { blog: updatedBlog },
   });
 };
 
