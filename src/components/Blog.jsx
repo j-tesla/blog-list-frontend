@@ -16,7 +16,6 @@ const Blog = () => {
   }
 
   const owned = activeUser === blog.user.id;
-
   // css
   const padding = {
     padding: 10,
@@ -51,6 +50,14 @@ const Blog = () => {
         </div>
         <div className="blogUser">{`added by ${blog.user.name}`}</div>
         {owned && (<button className="deleteButton" type="button" onClick={handleDelete}>delete</button>)}
+        <h4>comments</h4>
+        <ul style={padding}>
+          {
+            Array.from(blog.comments.entries(), ([index, blog]) => (
+              <li key={index.toString() + blog}>{blog}</li>
+            ))
+          }
+        </ul>
       </div>
     </div>
   );
