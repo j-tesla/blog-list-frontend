@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
 import { makeNotification } from '../reducers/notificationReducer';
 import { createBlog } from '../reducers/blogReducer';
+import { useField } from '../hooks';
 
 const NewBlogForm = ({ toggleVisibility }) => {
   const dispatch = useDispatch();
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
+  const { reset: resetTitle, ...title } = useField('title');
+  const { reset: resetAuthor, ...author } = useField('title');
+  const { reset: resetUrl, ...url } = useField('title', 'url');
 
-  const handleChange = (setter) => (event) => {
-    setter(event.target.value);
+  const reset = () => {
+    resetTitle();
+    resetAuthor();
+    resetUrl();
   };
 
   const addNewBlog = async (event) => {
@@ -20,15 +23,13 @@ const NewBlogForm = ({ toggleVisibility }) => {
 
     try {
       await dispatch(createBlog({
-        title,
-        author,
-        url,
+        title: title.value,
+        author: author.value,
+        url: url.value,
       }));
-      setTitle('');
-      setAuthor('');
-      setUrl('');
+      reset();
       toggleVisibility();
-      dispatch(makeNotification({ message: `a new blog: ${title} by ${author}`, color: 'green' }));
+      dispatch(makeNotification({ message: `a new blog: ${title.value} by ${author.value}`, color: 'green' }));
     } catch (e) {
       dispatch(makeNotification({ message: e.response.data.error, color: 'red' }));
     }
@@ -40,17 +41,17 @@ const NewBlogForm = ({ toggleVisibility }) => {
       <form onSubmit={addNewBlog}>
         <div>
           {'title: '}
-          <input id="title" value={title} onChange={handleChange(setTitle)} />
+          <input id="title" {...title} />
         </div>
 
         <div>
           {'author: '}
-          <input id="author" value={author} onChange={handleChange(setAuthor)} />
+          <input id="author" {...author} />
         </div>
 
         <div>
           {'url: '}
-          <input id="url" value={url} onChange={handleChange(setUrl)} />
+          <input id="url" {...url} />
         </div>
 
         <div>

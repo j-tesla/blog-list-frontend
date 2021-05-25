@@ -1,25 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { makeNotification } from '../reducers/notificationReducer';
 import { commentBlog } from '../reducers/blogReducer';
 import customPropTypes from '../utils/customPropTypes';
+import { useField } from '../hooks';
 
 const NewBlogForm = ({ blog }) => {
   const dispatch = useDispatch();
-  const [comment, setComment] = useState('');
-
-  const handleChange = (setter) => (event) => {
-    setter(event.target.value);
-  };
+  const { reset: resetComment, ...comment } = useField('comment');
 
   const addComment = async (event) => {
     event.preventDefault();
 
     try {
-      await dispatch(commentBlog(blog, comment));
-      setComment('');
-      dispatch(makeNotification({ message: `commented on blog ${blog.title}`, color: 'green' }));
+      await dispatch(commentBlog(blog, comment.value));
+      resetComment();
+      dispatch(makeNotification({ message: `commented on blog: "${blog.title}"`, color: 'green' }));
     } catch (e) {
       dispatch(makeNotification({ message: e.response.data.error, color: 'red' }));
     }
@@ -36,7 +33,7 @@ const NewBlogForm = ({ blog }) => {
     <div>
       <form onSubmit={addComment}>
         <div style={inlineStyle}>
-          <input id="comment" name="comment" value={comment} onChange={handleChange(setComment)} />
+          <input id="comment" {...comment} />
         </div>
 
         <div style={inlineStyle}>

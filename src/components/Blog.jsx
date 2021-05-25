@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { makeNotification } from '../reducers/notificationReducer';
 import { likeBlog, removeBlog } from '../reducers/blogReducer';
@@ -8,6 +8,7 @@ import NewCommentForm from './NewCommentForm';
 
 const Blog = () => {
   const dispatch = useDispatch();
+  const browserHistory = useHistory();
   const { id } = useParams();
   const { blog, activeUser } = useSelector((state) => ({
     blog: state.blogs.find((blog) => blog.id.toString() === id), activeUser: state.activeUser,
@@ -16,7 +17,6 @@ const Blog = () => {
     return null;
   }
 
-  const owned = activeUser === blog.user.id;
   // css
   const padding = {
     padding: 10,
@@ -32,7 +32,10 @@ const Blog = () => {
 
   const handleDelete = async () => {
     try {
-      if (window.confirm(`remove blog '${blog.title}' by ${blog.author}?`)) await dispatch(removeBlog(blog));
+      if (window.confirm(`remove blog '${blog.title}' by ${blog.author}?`)) {
+        await dispatch(removeBlog(blog));
+        browserHistory.push('/blogs');
+      }
     } catch (e) {
       if (e.response.status === 403) dispatch(makeNotification({ message: 'not your blog to delete, mate!', color: 'red' }));
     }
@@ -50,7 +53,7 @@ const Blog = () => {
           <button className="likeButton" type="button" onClick={handleLike}>like</button>
         </div>
         <div className="blogUser">{`added by ${blog.user.name}`}</div>
-        {owned && (<button className="deleteButton" type="button" onClick={handleDelete}>delete</button>)}
+        {activeUser.id === blog.user.id && (<button className="deleteButton" type="button" onClick={handleDelete}>delete</button>)}
         <h4>comments</h4>
         <NewCommentForm blog={blog} />
         <ul style={padding}>
