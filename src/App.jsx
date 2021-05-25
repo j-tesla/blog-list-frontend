@@ -17,8 +17,8 @@ const App = () => {
   const dispatch = useDispatch();
   const activeUser = useSelector((state) => state.activeUser);
 
-  useEffect(() => {
-    dispatch(initialiseLogin());
+  useEffect(async () => {
+    await dispatch(initialiseLogin());
     dispatch(initialiseUsers());
     dispatch(initialiseBlogs());
   }, [dispatch]);

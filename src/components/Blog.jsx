@@ -24,7 +24,7 @@ const Blog = () => {
 
   const handleLike = async () => {
     try {
-      dispatch(likeBlog(blog));
+      await dispatch(likeBlog(blog));
     } catch (e) {
       dispatch(makeNotification({ message: e.response.data.error, color: 'red' }));
     }
@@ -32,7 +32,7 @@ const Blog = () => {
 
   const handleDelete = async () => {
     try {
-      if (window.confirm(`remove blog '${blog.title}' by ${blog.author}?`)) dispatch(removeBlog(blog));
+      if (window.confirm(`remove blog '${blog.title}' by ${blog.author}?`)) await dispatch(removeBlog(blog));
     } catch (e) {
       if (e.response.status === 403) dispatch(makeNotification({ message: 'not your blog to delete, mate!', color: 'red' }));
     }

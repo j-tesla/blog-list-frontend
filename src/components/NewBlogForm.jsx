@@ -19,7 +19,7 @@ const NewBlogForm = ({ toggleVisibility }) => {
     event.preventDefault();
 
     try {
-      dispatch(createBlog({
+      await dispatch(createBlog({
         title,
         author,
         url,
