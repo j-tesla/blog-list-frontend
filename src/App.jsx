@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
+import { Container } from '@material-ui/core';
+
 import NavBar from './components/Navbar';
 import LoginForm from './components/LoginForm';
 import Blogs from './components/Blogs';
@@ -23,27 +25,20 @@ const App = () => {
     dispatch(initialiseBlogs());
   }, [dispatch]);
 
-  // css
-  const paddedDivStyle = {
-    paddingTop: 10,
-    paddingBottom: 10,
-  };
-
   return (
     <div>
       <Notifications />
+      <NavBar />
       {
         activeUser === null
           ? (
-            <div style={paddedDivStyle}>
+            <Container>
               <h2>login to application</h2>
               <LoginForm />
-            </div>
+            </Container>
           )
           : (
-            <div style={paddedDivStyle}>
-              <NavBar />
-              <h1>blogs</h1>
+            <Container>
               <Switch>
                 <Route path="/blogs/:id">
                   <Blog />
@@ -61,7 +56,7 @@ const App = () => {
                   <Redirect to="/blogs" />
                 </Route>
               </Switch>
-            </div>
+            </Container>
           )
       }
     </div>
