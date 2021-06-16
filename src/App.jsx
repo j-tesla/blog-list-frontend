@@ -7,7 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import NavBar from './components/Navbar';
 import LoginForm from './components/LoginForm';
 import Blogs from './components/Blogs';
-import Notifications from './components/Notifications';
+import Notification from './components/Notification';
 import { initialiseLogin } from './reducers/loginReducer';
 import Users from './components/Users';
 import User from './components/User';
@@ -28,11 +28,9 @@ const App = () => {
   return (
     <>
       <CssBaseline />
-      <div>
-        <Notifications />
-        <NavBar />
-        <Container>
-          {
+      <NavBar />
+      <Container>
+        {
             activeUser === null
               ? (
                 <>
@@ -68,8 +66,8 @@ const App = () => {
                 </>
               )
           }
-        </Container>
-      </div>
+      </Container>
+      <Notification />
     </>
   );
 };

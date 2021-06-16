@@ -39,15 +39,14 @@ const LoginForm = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      logger.info('logging in with', username, password);
       const user = await dispatch(login({ username: username.value, password: password.value }));
       reset();
-      dispatch(makeNotification({ message: `Welcome ${user.name}`, color: 'green' }));
+      dispatch(makeNotification({ message: `Welcome ${user.name}`, severity: 'success' }));
       browserHistory.push('/');
     } catch (e) {
       reset();
       logger.error(e.response.data);
-      dispatch(makeNotification({ message: e.response.data.error, color: 'red' }));
+      dispatch(makeNotification({ message: e.response.data.error, severity: 'error' }));
     }
   };
 

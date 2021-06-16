@@ -41,7 +41,7 @@ const NewBlogForm = ({ toggleVisibility }) => {
       }));
       reset();
       toggleVisibility();
-      dispatch(makeNotification({ message: `a new blog: ${title.value} by ${author.value}`, color: 'green' }));
+      dispatch(makeNotification({ message: `a new blog: ${title.value} by ${author.value}`, severity: 'success' }));
     } catch (e) {
       dispatch(makeNotification({ message: e.response.data.error, color: 'red' }));
     }

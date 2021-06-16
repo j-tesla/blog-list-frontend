@@ -39,9 +39,9 @@ const BlogComments = ({ blog }) => {
     try {
       await dispatch(commentBlog(blog, comment.value));
       resetComment();
-      dispatch(makeNotification({ message: `commented on blog: "${blog.title}"`, color: 'green' }));
+      dispatch(makeNotification({ message: `commented on blog: "${blog.title}"`, severity: 'success' }));
     } catch (e) {
-      dispatch(makeNotification({ message: e.response.data.error, color: 'red' }));
+      dispatch(makeNotification({ message: e.response.data.error, severity: 'error' }));
     }
   };
 

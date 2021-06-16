@@ -67,7 +67,7 @@ const Blog = () => {
     try {
       await dispatch(likeBlog(blog));
     } catch (e) {
-      dispatch(makeNotification({ message: e.response.data.error, color: 'red' }));
+      dispatch(makeNotification({ message: e.response.data.error, severity: 'error' }));
     }
   };
 
@@ -78,7 +78,7 @@ const Blog = () => {
         browserHistory.push('/blogs');
       }
     } catch (e) {
-      if (e.response.status === 403) dispatch(makeNotification({ message: 'not your blog to delete, mate!', color: 'red' }));
+      if (e.response.status === 403) dispatch(makeNotification({ message: 'not your blog to delete, mate!', severity: 'error' }));
     }
   };
 
