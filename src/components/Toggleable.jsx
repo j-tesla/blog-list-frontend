@@ -16,19 +16,17 @@ const Toggleable = forwardRef(({
   useImperativeHandle(ref, () => ({ toggleVisibility }));
 
   return (
-    <div>
-      {!visible && (
-        <div>
-          {button}
-        </div>
-      )}
-
-      {visible && (
-        <div>
+    <>
+      {visible ? (
+        <>
           {children}
-        </div>
+        </>
+      ) : (
+        <>
+          {button}
+        </>
       )}
-    </div>
+    </>
   );
 });
 
