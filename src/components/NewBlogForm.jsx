@@ -9,15 +9,6 @@ import { makeNotification } from '../reducers/notificationReducer';
 import { createBlog } from '../reducers/blogReducer';
 import { useField } from '../hooks';
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     '& > *': {
-//       margin: theme.spacing(4),
-//       width: '25ch',
-//     },
-//   },
-// }));
-
 const NewBlogForm = ({ toggleVisibility }) => {
   const dispatch = useDispatch();
   const {
@@ -93,8 +84,8 @@ const NewBlogForm = ({ toggleVisibility }) => {
           </div>
         </CardContent>
         <CardActions>
-          <Button color="primary" type="submit">create</Button>
-          <Button color="default" type="button" onClick={toggleVisibility}>cancel</Button>
+          <Button color="primary" type="submit">Create</Button>
+          <Button color="default" type="button" onClick={toggleVisibility}>Cancel</Button>
         </CardActions>
       </form>
     </Card>
