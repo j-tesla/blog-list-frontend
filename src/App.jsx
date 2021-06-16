@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
-
 import { Container } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import NavBar from './components/Navbar';
 import LoginForm from './components/LoginForm';
@@ -26,40 +26,45 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div>
-      <Notifications />
-      <NavBar />
-      {
-        activeUser === null
-          ? (
-            <Container>
-              <h2>login to application</h2>
-              <LoginForm />
-            </Container>
-          )
-          : (
-            <Container>
-              <Switch>
-                <Route path="/blogs/:id">
-                  <Blog />
-                </Route>
-                <Route path="/users/:id">
-                  <User />
-                </Route>
-                <Route path="/users">
-                  <Users />
-                </Route>
-                <Route path="/blogs">
-                  <Blogs />
-                </Route>
-                <Route path="/">
-                  <Redirect to="/blogs" />
-                </Route>
-              </Switch>
-            </Container>
-          )
-      }
-    </div>
+    <>
+      <CssBaseline />
+      <div>
+        <Notifications />
+        <NavBar />
+        <Container>
+          {
+            activeUser === null
+              ? (
+                <>
+                  <h2>login to application</h2>
+                  <LoginForm />
+                </>
+              )
+              : (
+                <>
+                  <Switch>
+                    <Route path="/blogs/:id">
+                      <Blog />
+                    </Route>
+                    <Route path="/users/:id">
+                      <User />
+                    </Route>
+                    <Route path="/users">
+                      <Users />
+                    </Route>
+                    <Route path="/blogs">
+                      <Blogs />
+                    </Route>
+                    <Route path="/">
+                      <Redirect to="/blogs" />
+                    </Route>
+                  </Switch>
+                </>
+              )
+          }
+        </Container>
+      </div>
+    </>
   );
 };
 

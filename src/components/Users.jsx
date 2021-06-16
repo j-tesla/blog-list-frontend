@@ -1,48 +1,74 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
+import {
+  List, ListItem, ListItemText, makeStyles, Typography,
+} from '@material-ui/core';
 import Blogs from './Blogs';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: theme.spacing(5),
+    '& > *': {
+      margin: theme.spacing(2),
+    },
+  },
+  title: {
+    flexGrow: 1,
+  },
+  inline: {
+    display: 'inline',
+  },
+  list: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
+
 const Users = () => {
+  const browserHistory = useHistory();
+  const classes = useStyles();
   const users = useSelector((state) => state.users);
 
-  // css
-  const paddedDivStyle = {
-    paddingTop: 10,
-    paddingBottom: 10,
+  const handleUserClick = ({ id }) => (event) => {
+    event.preventDefault();
+    browserHistory.push(`/users/${id}`);
   };
-  const padding = {
-    padding: 5,
-  };
-  const tableStyle = {
-    padding: 10,
-    border: '1px solid black',
-    borderSpacing: 3,
-    width: '100%',
-  };
-  const tableHeaderStyle = {
-    textAlign: 'left',
-  };
+
   return (
-    <div style={paddedDivStyle}>
-      <h2 style={paddedDivStyle}>Users</h2>
-      <table style={tableStyle}>
-        <thead>
-          <tr>
-            <th style={tableHeaderStyle}> </th>
-            <th style={tableHeaderStyle}>blogs created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td><Link style={padding} to={`/users/${user.id}`}>{user.name}</Link></td>
-              <td>{user.blogs.length}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className={classes.root}>
+      <Typography variant="h3" className={classes.title}>Users</Typography>
+
+      <List className={classes.list}>
+        {users.map(((user) => (
+          <ListItem alignItems="flex-start" key={user.id} button onClick={handleUserClick(user)}>
+            <ListItemText
+              primary={(
+                <Typography
+                  variant="h5"
+                  to={`/users/${user.id}`}
+                >
+                  {`${user.username}`}
+                </Typography>
+              )}
+              secondary={(
+                <>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    className={classes.inline}
+                    color="textPrimary"
+                  >
+                    {user.name}
+                  </Typography>
+                  {` added ${user.blogs.length} blogs`}
+                </>
+              )}
+            />
+          </ListItem>
+        )))}
+      </List>
     </div>
   );
 };

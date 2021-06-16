@@ -2,15 +2,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 
+import {
+  Button, TextField, Card, CardHeader, CardContent, CardActions,
+} from '@material-ui/core';
 import { makeNotification } from '../reducers/notificationReducer';
 import { createBlog } from '../reducers/blogReducer';
 import { useField } from '../hooks';
 
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     '& > *': {
+//       margin: theme.spacing(4),
+//       width: '25ch',
+//     },
+//   },
+// }));
+
 const NewBlogForm = ({ toggleVisibility }) => {
   const dispatch = useDispatch();
-  const { reset: resetTitle, ...title } = useField('title');
-  const { reset: resetAuthor, ...author } = useField('title');
-  const { reset: resetUrl, ...url } = useField('title', 'url');
+  const {
+    reset: resetTitle,
+    ...title
+  } = useField('title');
+  const {
+    reset: resetAuthor,
+    ...author
+  } = useField('title');
+  const {
+    reset: resetUrl,
+    ...url
+  } = useField('title', 'url');
 
   const reset = () => {
     resetTitle();
@@ -36,29 +57,47 @@ const NewBlogForm = ({ toggleVisibility }) => {
   };
 
   return (
-    <div>
-      <h3>create new</h3>
+    <Card variant="outlined">
+      <CardHeader title="CREATE NEW" />
       <form onSubmit={addNewBlog}>
-        <div>
-          {'title: '}
-          <input id="title" {...title} />
-        </div>
-
-        <div>
-          {'author: '}
-          <input id="author" {...author} />
-        </div>
-
-        <div>
-          {'url: '}
-          <input id="url" {...url} />
-        </div>
-
-        <div>
-          <button type="submit">create</button>
-        </div>
+        <CardContent>
+          <div>
+            <TextField
+              id="title-input"
+              color="primary"
+              {...title}
+              label="title"
+              required
+              margin="normal"
+            />
+          </div>
+          <div>
+            <TextField
+              id="author-input"
+              color="primary"
+              {...author}
+              label="author"
+              required
+              margin="normal"
+            />
+          </div>
+          <div>
+            <TextField
+              id="url-input"
+              color="primary"
+              {...url}
+              label="url"
+              required
+              margin="normal"
+            />
+          </div>
+        </CardContent>
+        <CardActions>
+          <Button color="primary" type="submit">create</Button>
+          <Button color="default" type="button" onClick={toggleVisibility}>cancel</Button>
+        </CardActions>
       </form>
-    </div>
+    </Card>
   );
 };
 

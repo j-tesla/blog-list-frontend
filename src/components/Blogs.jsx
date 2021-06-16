@@ -1,25 +1,47 @@
 import React, { useRef } from 'react';
 import { useSelector } from 'react-redux';
+import {
+  List, ListItem, ListItemText, makeStyles, Paper, Tooltip, Typography, useTheme, Zoom,
+} from '@material-ui/core';
+import Fab from '@material-ui/core/Fab';
 
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import AddIcon from '@material-ui/icons/Add';
 import NewBlogForm from './NewBlogForm';
 import Toggleable from './Toggleable';
-// import blogsService from '../services/blogs';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: theme.spacing(5),
+    '& > *': {
+      margin: theme.spacing(2),
+    },
+  },
+  title: {
+    flexGrow: 1,
+  },
+  newBlogIcon: {
+    fontSize: theme.typography.fontSize * 3,
+  },
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing(3),
+    right: theme.spacing(3),
+  },
+  zoom: {
+    transitionDelay: theme.transitions.duration.leavingScreen,
+  },
+}));
 
 const Blogs = () => {
+  const classes = useStyles();
+  const theme = useTheme();
+  const browserHistory = useHistory();
   const { blogs } = useSelector((state) => (state));
 
-  // css
-  const paddedDivStyle = {
-    paddingTop: 10,
-    paddingBottom: 10,
-  };
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
+  const transitionDuration = {
+    enter: theme.transitions.duration.enteringScreen,
+    exit: theme.transitions.duration.leavingScreen,
   };
 
   // ref to Toggleable
@@ -28,24 +50,52 @@ const Blogs = () => {
     newBlogRef.current.toggleVisibility();
   };
 
-  return (
-    <div>
-      <div style={paddedDivStyle}>
-        <Toggleable buttonLabel="new blog" ref={newBlogRef}>
-          <NewBlogForm
-            toggleVisibility={toggleVisibility}
-          />
-        </Toggleable>
-      </div>
+  const handleBlogClick = ({ id }) => (event) => {
+    event.preventDefault();
+    browserHistory.push(`/blogs/${id}`);
+  };
 
-      <div style={paddedDivStyle}>
-        {blogs.map((blog) => (
-          <div style={blogStyle} key={blog.id}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-            {` by ${blog.author}`}
-          </div>
-        ))}
-      </div>
+  return (
+    <div className={classes.root}>
+      <Typography variant="h3" className={classes.title}>Blogs</Typography>
+
+      <Toggleable
+        button={(
+          <Zoom
+            unmountOnExit
+            timeout={transitionDuration}
+            className={classes.zoom}
+            in
+          >
+            <Tooltip title="Add New Blog" aria-label="Add New Blog">
+              <Fab color="primary" size="large" className={classes.fab} onClick={toggleVisibility}>
+                <AddIcon color="inherit" />
+              </Fab>
+            </Tooltip>
+          </Zoom>
+        )}
+        ref={newBlogRef}
+      >
+        <NewBlogForm
+          toggleVisibility={toggleVisibility}
+        />
+      </Toggleable>
+      {/* </div> */}
+
+      <Paper variant="outlined">
+        <List>
+          {blogs.map((blog) => (
+            <ListItem alignItems="flex-start" key={blog.id} button onClick={handleBlogClick(blog)}>
+              <ListItemText
+                primary={(
+                  <Typography variant="h5">{blog.title}</Typography>
+                )}
+                secondary={` by ${blog.author}`}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
     </div>
   );
 };

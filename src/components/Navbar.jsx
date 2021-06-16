@@ -63,7 +63,7 @@ const NavBar = () => {
         <Toolbar>
 
           <Typography variant="h5" color="inherit" className={classes.title}>
-            Blogs
+            Bloglist
           </Typography>
           <NavLink
             className={classes.navLink}
