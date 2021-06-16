@@ -65,49 +65,74 @@ const NavBar = () => {
           <Typography variant="h5" color="inherit" className={classes.title}>
             Bloglist
           </Typography>
-          <NavLink
-            className={classes.navLink}
-            activeClassName={clsx([classes.navLink, classes.activeNavLink])}
-            exact
-            to="/blogs"
-          >
-            <Button variant="text" className={classes.navBtn}>blogs</Button>
-          </NavLink>
-          <NavLink
-            className={classes.navLink}
-            activeClassName={clsx([classes.navLink, classes.activeNavLink])}
-            exact
-            to="/users"
-          >
-            <Button variant="text" className={classes.navBtn}>users</Button>
-          </NavLink>
-          <IconButton
-            aria-label="current user's account"
-            aria-controls="account-menu"
-            aria-haspopup="true"
-            onClick={handleAccountMenu}
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <Menu
-            id="account-menu"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={open}
-            onClose={handleAccountMenuClose}
-          >
-            <MenuItem onClick={handleAccount}>Account</MenuItem>
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-          </Menu>
+
+          {activeUser ? (
+            <>
+              <NavLink
+                className={classes.navLink}
+                activeClassName={clsx([classes.navLink, classes.activeNavLink])}
+                exact
+                to="/blogs"
+              >
+                <Button variant="text" className={classes.navBtn}>blogs</Button>
+              </NavLink>
+              <NavLink
+                className={classes.navLink}
+                activeClassName={clsx([classes.navLink, classes.activeNavLink])}
+                exact
+                to="/users"
+              >
+                <Button variant="text" className={classes.navBtn}>users</Button>
+              </NavLink>
+
+              <IconButton
+                aria-label="current user's account"
+                aria-controls="account-menu"
+                aria-haspopup="true"
+                onClick={handleAccountMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="account-menu"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={open}
+                onClose={handleAccountMenuClose}
+              >
+                <MenuItem onClick={handleAccount}>Account</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <>
+              <NavLink
+                className={classes.navLink}
+                activeClassName={clsx([classes.navLink, classes.activeNavLink])}
+                exact
+                to="/login"
+              >
+                <Button variant="text" className={classes.navBtn}>login</Button>
+              </NavLink>
+              {/* <NavLink */}
+              {/*  className={classes.navLink} */}
+              {/*  activeClassName={clsx([classes.navLink, classes.activeNavLink])} */}
+              {/*  exact */}
+              {/*  to="/signup" */}
+              {/* > */}
+              {/*  <Button variant="text" className={classes.navBtn}>signup</Button> */}
+              {/* </NavLink> */}
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </div>

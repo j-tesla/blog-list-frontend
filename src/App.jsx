@@ -36,8 +36,14 @@ const App = () => {
             activeUser === null
               ? (
                 <>
-                  <h2>login to application</h2>
-                  <LoginForm />
+                  <Switch>
+                    <Route path="/login">
+                      <LoginForm />
+                    </Route>
+                    <Route path="/">
+                      <Redirect to="/login" />
+                    </Route>
+                  </Switch>
                 </>
               )
               : (
