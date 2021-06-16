@@ -14,6 +14,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeNotification } from '../reducers/notificationReducer';
 import { likeBlog, removeBlog } from '../reducers/blogReducer';
 import BlogComments from './BlogComments';
+import Confirm from './Confirm';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,82 +49,114 @@ const useStyles = makeStyles((theme) => ({
 
 const Blog = () => {
   const classes = useStyles();
-  const [expanded, setExpanded] = useState(false);
+  const [commentsExpanded, setCommentsExpanded] = useState(false);
+  const [dialog, setDialog] = useState(false);
   const dispatch = useDispatch();
   const browserHistory = useHistory();
   const { id } = useParams();
-  const { blog, activeUser } = useSelector((state) => ({
-    blog: state.blogs.find((blog) => blog.id.toString() === id), activeUser: state.activeUser,
+  const {
+    blog,
+    activeUser,
+  } = useSelector((state) => ({
+    blog: state.blogs.find((blog) => blog.id.toString() === id),
+    activeUser: state.activeUser,
   }));
   if (!blog) {
     return null;
   }
 
   const handleExpandClick = () => {
-    setExpanded(!expanded);
+    setCommentsExpanded(!commentsExpanded);
   };
 
   const handleLike = async () => {
     try {
       await dispatch(likeBlog(blog));
     } catch (e) {
-      dispatch(makeNotification({ message: e.response.data.error, severity: 'error' }));
+      dispatch(makeNotification({
+        message: e.response.data.error,
+        severity: 'error',
+      }));
     }
   };
 
+  const deleteBlog = async () => {
+    await dispatch(removeBlog(blog));
+    browserHistory.push('/blogs');
+  };
   const handleDelete = async () => {
     try {
-      if (window.confirm(`remove blog '${blog.title}' by ${blog.author}?`)) {
-        await dispatch(removeBlog(blog));
-        browserHistory.push('/blogs');
-      }
+      setDialog(true);
     } catch (e) {
-      if (e.response.status === 403) dispatch(makeNotification({ message: 'not your blog to delete, mate!', severity: 'error' }));
+      if (e.response.status === 403) {
+        dispatch(makeNotification({
+          message: 'not your blog to delete, mate!',
+          severity: 'error',
+        }));
+      }
     }
   };
 
   return (
-    <Card variant="outlined" className={classes.root}>
-      <CardHeader
-        title={blog.title}
-        subheader={` by ${blog.author}`}
-        titleTypographyProps={{ variant: 'h3' }}
-        subheaderTypographyProps={{ variant: 'h5' }}
-        action={(
-          <IconButton color="inherit" href={blog.url}>
-            <Link href={blog.url} />
-          </IconButton>
-        )}
-      />
-      <CardContent>
-        <Typography variant="h6">{`added by ${blog.user.name}`}</Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <Button variant="outlined" className={classes.likeButton} onClick={handleLike} color="secondary" startIcon={<ThumbUpIcon />}>
-          <span>{`Likes: ${blog.likes}`}</span>
-        </Button>
-        {activeUser.id === blog.user.id && (
-          <IconButton onClick={handleDelete} className={classes.deleteButton}>
-            <DeleteIcon />
-          </IconButton>
-        )}
+    <>
+      {dialog
+      && (
+        <Confirm
+          confirm={deleteBlog}
+          cancel={() => {
+            setDialog(false);
+          }}
+          message={`Delete blog '${blog.title}' by ${blog.author}?`}
+        />
+      )}
+      <Card variant="outlined" className={classes.root}>
+        <CardHeader
+          title={blog.title}
+          subheader={` by ${blog.author}`}
+          titleTypographyProps={{ variant: 'h3' }}
+          subheaderTypographyProps={{ variant: 'h5' }}
+          action={(
+            <IconButton color="inherit" href={blog.url}>
+              <Link href={blog.url} />
+            </IconButton>
+          )}
+        />
+        <CardContent>
+          <Typography variant="h6">{`added by ${blog.user.name}`}</Typography>
+        </CardContent>
+        <CardActions disableSpacing>
+          <Button
+            variant="outlined"
+            className={classes.likeButton}
+            onClick={handleLike}
+            color="secondary"
+            startIcon={<ThumbUpIcon />}
+          >
+            <span>{`Likes: ${blog.likes}`}</span>
+          </Button>
+          {activeUser.id === blog.user.id && (
+            <IconButton onClick={handleDelete} className={classes.deleteButton}>
+              <DeleteIcon />
+            </IconButton>
+          )}
 
-        <IconButton
-          color="inherit"
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <BlogComments blog={blog} />
-      </Collapse>
-    </Card>
+          <IconButton
+            color="inherit"
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: commentsExpanded,
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={commentsExpanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={commentsExpanded} timeout="auto" unmountOnExit>
+          <BlogComments blog={blog} />
+        </Collapse>
+      </Card>
+    </>
   );
 };
 
