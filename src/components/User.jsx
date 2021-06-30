@@ -42,11 +42,13 @@ const User = () => {
         subheaderTypographyProps={{ variant: 'h5' }}
       />
       <CardContent>
-        <Card variant="outlined">
-          <CardHeader title="Blogs Added" />
-          <CardContent>
-            <List>
-              {
+        {user.blogs.length > 0
+          ? (
+            <Card variant="outlined">
+              <CardHeader title="Blogs Added" />
+              <CardContent>
+                <List>
+                  {
                 user.blogs.map((blog) => (
                   <ListItem alignItems="flex-start" button onClick={handleBlogClick(blog)} key={blog.id}>
                     <ListItemText
@@ -58,9 +60,13 @@ const User = () => {
                   </ListItem>
                 ))
               }
-            </List>
-          </CardContent>
-        </Card>
+                </List>
+              </CardContent>
+            </Card>
+          )
+          : (
+            <Typography variant="body1">No blogs added by the user</Typography>
+          )}
       </CardContent>
     </Card>
   );

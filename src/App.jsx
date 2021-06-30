@@ -14,6 +14,7 @@ import User from './components/User';
 import { initialiseUsers } from './reducers/userReducer';
 import Blog from './components/Blog';
 import { initialiseBlogs } from './reducers/blogReducer';
+import SignupForm from './components/SignupForm';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,9 @@ const App = () => {
                   <Switch>
                     <Route path="/login">
                       <LoginForm />
+                    </Route>
+                    <Route path="/signup">
+                      <SignupForm />
                     </Route>
                     <Route path="/">
                       <Redirect to="/login" />

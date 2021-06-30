@@ -123,14 +123,14 @@ const NavBar = () => {
               >
                 <Button variant="text" className={classes.navBtn}>login</Button>
               </NavLink>
-              {/* <NavLink */}
-              {/*  className={classes.navLink} */}
-              {/*  activeClassName={clsx([classes.navLink, classes.activeNavLink])} */}
-              {/*  exact */}
-              {/*  to="/signup" */}
-              {/* > */}
-              {/*  <Button variant="text" className={classes.navBtn}>signup</Button> */}
-              {/* </NavLink> */}
+              <NavLink
+                className={classes.navLink}
+                activeClassName={clsx([classes.navLink, classes.activeNavLink])}
+                exact
+                to="/signup"
+              >
+                <Button variant="text" className={classes.navBtn}>signup</Button>
+              </NavLink>
             </>
           )}
         </Toolbar>
