@@ -15,7 +15,7 @@ import {
 import logger from '../utils/logger';
 import { makeNotification } from '../reducers/notificationReducer';
 import { useField } from '../hooks';
-import usersService from '../services/users';
+import { createUser } from '../reducers/userReducer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,11 +82,11 @@ const LoginForm = () => {
   const handleSignup = async (event) => {
     event.preventDefault();
     try {
-      await usersService.create({
+      await dispatch(createUser({
         name: name.value,
         username: username.value,
         password: newPassword.value,
-      });
+      }));
       reset();
       dispatch(makeNotification({
         message: 'New account created. Login to continue.',

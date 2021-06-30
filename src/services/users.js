@@ -7,8 +7,8 @@ const getAll = async () => {
   return response.data;
 };
 
-const create = async (credentials) => {
-  const response = await axios.post(baseUrl, credentials);
+const create = async (user) => {
+  const response = await axios.post(baseUrl, user);
   return response.data;
 };
 
