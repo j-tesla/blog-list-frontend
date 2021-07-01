@@ -95,7 +95,7 @@ const LoginForm = () => {
       browserHistory.push('/login');
     } catch (e) {
       logger.error(e.response.data);
-      if (e.response.data.error.includes('username: already exists')) {
+      if (e.response.data.error.includes('User validation failed: username: Error, expected `username` to be unique.')) {
         dispatch(makeNotification({
           message: `Username "${username.value}" already exists. Login or try a different one.`,
           severity: 'error',
